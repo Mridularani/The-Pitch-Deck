@@ -11,151 +11,74 @@
 <meta name="apple-mobile-web-app-title" content="Recipe Box">
 <link rel="manifest" href="/The-Pitch-Deck/manifest-recipes.json">
 <link rel="apple-touch-icon" href="/The-Pitch-Deck/icons/icon-recipe-192.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/YOUR_REPO_NAME/icons/icon-recipe-192.png"><meta name="theme-color" content="#b45309">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Recipe Box">
+<link rel="icon" type="image/png" sizes="192x192" href="/The-Pitch-Deck/icons/icon-recipe-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --cream: #fdf8f2;
-  --cream2: #f5ede0;
-  --cream3: #ede0cc;
-  --brown: #92400e;
-  --brown2: #b45309;
-  --brown3: #78350f;
-  --text: #1c1208;
-  --text2: #6b4c2a;
-  --text3: #a07850;
-  --border: rgba(146,64,14,0.15);
-  --border2: rgba(146,64,14,0.28);
-  --green-bg: #f0fdf4;
-  --green-text: #166534;
-  --amber-bg: #fffbeb;
-  --amber-text: #92400e;
-  --red-bg: #fef2f2;
-  --red-text: #991b1b;
-  --radius: 10px;
-  --radius-lg: 16px;
+  --cream: #fdf8f2; --cream2: #f5ede0; --cream3: #ede0cc;
+  --brown: #92400e; --brown2: #b45309; --brown3: #78350f;
+  --text: #1c1208; --text2: #6b4c2a; --text3: #a07850;
+  --border: rgba(146,64,14,0.15); --border2: rgba(146,64,14,0.28);
+  --green-bg: #f0fdf4; --green-text: #166534;
+  --amber-bg: #fffbeb; --amber-text: #92400e;
+  --red-bg: #fef2f2; --red-text: #991b1b;
+  --radius: 10px; --radius-lg: 16px;
   --shadow: 0 2px 12px rgba(146,64,14,0.1);
   --shadow-lg: 0 8px 32px rgba(146,64,14,0.15);
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --cream: #1a1208;
-    --cream2: #231808;
-    --cream3: #2e200e;
-    --brown: #d97706;
-    --brown2: #f59e0b;
-    --brown3: #fbbf24;
-    --text: #fdf8f2;
-    --text2: #d4a96a;
-    --text3: #9a7040;
-    --border: rgba(217,119,6,0.18);
-    --border2: rgba(217,119,6,0.32);
-    --green-bg: #052e16;
-    --green-text: #86efac;
-    --amber-bg: #1c1200;
-    --amber-text: #fcd34d;
-    --red-bg: #1c0a0a;
-    --red-text: #fca5a5;
+    --cream: #1a1208; --cream2: #231808; --cream3: #2e200e;
+    --brown: #d97706; --brown2: #f59e0b; --brown3: #fbbf24;
+    --text: #fdf8f2; --text2: #d4a96a; --text3: #9a7040;
+    --border: rgba(217,119,6,0.18); --border2: rgba(217,119,6,0.32);
+    --green-bg: #052e16; --green-text: #86efac;
+    --amber-bg: #1c1200; --amber-text: #fcd34d;
+    --red-bg: #1c0a0a; --red-text: #fca5a5;
     --shadow: 0 2px 12px rgba(0,0,0,0.3);
     --shadow-lg: 0 8px 32px rgba(0,0,0,0.4);
   }
 }
-
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--cream);
-  color: var(--text);
-  min-height: 100vh;
-  font-size: 15px;
-  line-height: 1.6;
-}
-
-/* ── header ── */
-.header {
-  background: var(--cream2);
-  border-bottom: 1px solid var(--border2);
-  padding: 1rem 1.25rem;
-  position: sticky; top: 0; z-index: 50;
-}
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; font-size: 15px; line-height: 1.6; }
+.header { background: var(--cream2); border-bottom: 1px solid var(--border2); padding: 1rem 1.25rem; position: sticky; top: 0; z-index: 50; }
 .header-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
 .logo { display: flex; align-items: center; gap: 10px; }
 .logo-icon { font-size: 24px; }
 .logo h1 { font-family: 'Lora', serif; font-size: 20px; font-weight: 600; color: var(--brown3); }
 .logo p { font-size: 11px; color: var(--text3); font-style: italic; }
 .header-right { display: flex; gap: 8px; align-items: center; }
-
-/* ── buttons ── */
-button {
-  font-family: 'DM Sans', sans-serif;
-  cursor: pointer;
-  border: none;
-  outline: none;
-  transition: all 0.15s;
-}
+button { font-family: 'DM Sans', sans-serif; cursor: pointer; border: none; outline: none; transition: all 0.15s; }
 button:active { transform: scale(0.97); }
-.btn {
-  font-size: 13px; padding: 7px 13px; border-radius: var(--radius);
-  border: 1px solid var(--border2); background: transparent; color: var(--text2);
-  display: inline-flex; align-items: center; gap: 5px;
-}
+.btn { font-size: 13px; padding: 7px 13px; border-radius: var(--radius); border: 1px solid var(--border2); background: transparent; color: var(--text2); display: inline-flex; align-items: center; gap: 5px; }
 .btn:hover { background: var(--cream3); }
-.btn-primary {
-  background: var(--brown2); border-color: var(--brown2); color: white;
-  font-weight: 500;
-}
+.btn-primary { background: var(--brown2); border-color: var(--brown2); color: white; font-weight: 500; }
 .btn-primary:hover { background: var(--brown3); border-color: var(--brown3); }
 .btn-icon { padding: 5px 7px; border-color: transparent; background: transparent; color: var(--text3); font-size: 15px; border-radius: var(--radius); }
 .btn-icon:hover { background: var(--cream3); color: var(--text); border-color: var(--border); }
-
-/* ── search ── */
+.btn-danger { color: var(--red-text); border-color: rgba(153,27,27,0.3); }
+.btn-danger:hover { background: var(--red-bg); }
+input, select, textarea { font-family: 'DM Sans', sans-serif; font-size: 13px; padding: 8px 11px; border: 1px solid var(--border2); border-radius: var(--radius); background: var(--cream); color: var(--text); width: 100%; outline: none; transition: box-shadow 0.15s; }
+input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 3px rgba(180,83,9,0.15); border-color: var(--brown2); }
+textarea { resize: vertical; height: 72px; line-height: 1.5; }
+select { cursor: pointer; }
 .search-bar { max-width: 900px; margin: 1rem auto; padding: 0 1.25rem; }
 .search-wrap { position: relative; }
 .search-wrap input { padding-left: 36px; font-size: 14px; }
 .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); font-size: 16px; color: var(--text3); pointer-events: none; }
-
-/* ── inputs ── */
-input, select, textarea {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px; padding: 8px 11px;
-  border: 1px solid var(--border2); border-radius: var(--radius);
-  background: var(--cream); color: var(--text); width: 100%; outline: none;
-  transition: box-shadow 0.15s;
-}
-input:focus, select:focus, textarea:focus {
-  box-shadow: 0 0 0 3px rgba(180,83,9,0.15); border-color: var(--brown2);
-}
-textarea { resize: vertical; height: 72px; line-height: 1.5; }
-select { cursor: pointer; }
-
-/* ── stats ── */
 .stats { max-width: 900px; margin: 0 auto 1rem; padding: 0 1.25rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 8px; }
 .stat { background: var(--cream2); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; text-align: center; }
 .stat-val { font-family: 'Lora', serif; font-size: 24px; font-weight: 600; color: var(--brown2); }
 .stat-label { font-size: 11px; color: var(--text3); }
-
-/* ── filters ── */
 .filters { max-width: 900px; margin: 0 auto 1rem; padding: 0 1.25rem; display: flex; gap: 6px; flex-wrap: wrap; }
 .pill { font-size: 12px; padding: 4px 11px; border-radius: 20px; border: 1px solid var(--border2); background: transparent; color: var(--text2); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.12s; }
 .pill:hover { background: var(--cream2); }
 .pill.active { background: var(--brown2); border-color: var(--brown2); color: white; }
 .filter-sep { width: 1px; background: var(--border2); align-self: stretch; margin: 0 2px; }
-
-/* ── grid ── */
 .main { max-width: 900px; margin: 0 auto; padding: 0 1.25rem 4rem; }
 .recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
-
-/* ── card ── */
-.card {
-  background: var(--cream2); border: 1px solid var(--border); border-radius: var(--radius-lg);
-  padding: 1.1rem; box-shadow: var(--shadow); transition: box-shadow 0.2s, transform 0.2s;
-  display: flex; flex-direction: column; gap: 8px;
-}
+.card { background: var(--cream2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.1rem; box-shadow: var(--shadow); transition: box-shadow 0.2s, transform 0.2s; display: flex; flex-direction: column; gap: 8px; }
 .card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
 .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
 .card-title { font-family: 'Lora', serif; font-size: 15px; font-weight: 600; line-height: 1.4; flex: 1; color: var(--brown3); }
@@ -165,35 +88,19 @@ select { cursor: pointer; }
 .card-url a { font-size: 11px; color: var(--text3); text-decoration: none; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .card-url a:hover { color: var(--brown2); text-decoration: underline; }
 .card-tags { display: flex; gap: 5px; flex-wrap: wrap; }
-
-/* ── badges ── */
 .badge { font-size: 11px; padding: 2px 8px; border-radius: 10px; display: inline-block; white-space: nowrap; font-weight: 500; }
 .badge-cuisine { background: var(--amber-bg); color: var(--amber-text); border: 1px solid rgba(180,83,9,0.2); }
 .badge-meal { background: var(--cream3); color: var(--text2); border: 1px solid var(--border); }
 .badge-try { background: var(--amber-bg); color: var(--amber-text); }
 .badge-liked { background: var(--green-bg); color: var(--green-text); }
-
-/* ── ingredient tags ── */
 .tag { font-size: 11px; padding: 2px 7px; border-radius: 8px; background: var(--cream3); color: var(--text2); border: 1px solid var(--border); }
-
-/* ── empty ── */
 .empty { text-align: center; padding: 4rem 1rem; color: var(--text3); }
 .empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
 .empty h3 { font-family: 'Lora', serif; font-size: 18px; color: var(--text2); margin-bottom: 6px; }
 .empty p { font-size: 13px; }
-
-/* ── modal ── */
-.modal-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(28,18,8,0.5); z-index: 100;
-  align-items: center; justify-content: center; padding: 1rem;
-}
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(28,18,8,0.5); z-index: 100; align-items: center; justify-content: center; padding: 1rem; }
 .modal-overlay.open { display: flex; }
-.modal {
-  background: var(--cream); border: 1px solid var(--border2); border-radius: var(--radius-lg);
-  padding: 1.5rem; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto;
-  box-shadow: var(--shadow-lg);
-}
+.modal { background: var(--cream); border: 1px solid var(--border2); border-radius: var(--radius-lg); padding: 1.5rem; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); }
 .modal h2 { font-family: 'Lora', serif; font-size: 18px; font-weight: 600; color: var(--brown3); margin-bottom: 1.25rem; }
 .form-row { margin-bottom: 14px; }
 .form-row label { display: block; font-size: 12px; color: var(--text2); margin-bottom: 5px; font-weight: 500; }
@@ -201,43 +108,32 @@ select { cursor: pointer; }
 .fetch-row { display: flex; gap: 6px; }
 .fetch-row input { flex: 1; }
 .status-pills { display: flex; gap: 8px; }
-.status-pill {
-  flex: 1; padding: 8px; border-radius: var(--radius); border: 1px solid var(--border2);
-  background: transparent; font-family: 'DM Sans', sans-serif; font-size: 13px;
-  color: var(--text2); cursor: pointer; text-align: center; transition: all 0.15s;
-}
+.status-pill { flex: 1; padding: 8px; border-radius: var(--radius); border: 1px solid var(--border2); background: transparent; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text2); cursor: pointer; text-align: center; transition: all 0.15s; }
 .status-pill.active-try { background: var(--amber-bg); border-color: var(--brown2); color: var(--brown2); font-weight: 500; }
 .status-pill.active-liked { background: var(--green-bg); border-color: #16a34a; color: #15803d; font-weight: 500; }
 .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border); }
-
-/* ── confirm ── */
 .confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(28,18,8,0.5); z-index: 150; align-items: center; justify-content: center; }
 .confirm-overlay.open { display: flex; }
 .confirm-box { background: var(--cream); border: 1px solid var(--border2); border-radius: var(--radius-lg); padding: 1.5rem; max-width: 320px; width: 90%; box-shadow: var(--shadow-lg); }
 .confirm-box h3 { font-family: 'Lora', serif; font-size: 16px; color: var(--brown3); margin-bottom: 8px; }
 .confirm-box p { font-size: 13px; color: var(--text2); margin-bottom: 1.25rem; }
 .confirm-actions { display: flex; gap: 8px; justify-content: flex-end; }
-.btn-danger { color: var(--red-text); border-color: rgba(153,27,27,0.3); }
-.btn-danger:hover { background: var(--red-bg); }
-
-/* ── toast ── */
-.toast {
-  position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(16px);
-  background: var(--brown3); color: white; font-size: 13px; padding: 10px 18px;
-  border-radius: 20px; z-index: 200; opacity: 0; transition: opacity 0.2s, transform 0.2s;
-  pointer-events: none; white-space: nowrap;
-}
+.toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(16px); background: var(--brown3); color: white; font-size: 13px; padding: 10px 18px; border-radius: 20px; z-index: 200; opacity: 0; transition: opacity 0.2s, transform 0.2s; pointer-events: none; white-space: nowrap; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-/* ── spinner ── */
 .spinner { display: inline-block; width: 13px; height: 13px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-
-/* ── divider ── */
-.section-label { font-size: 11px; color: var(--text3); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; padding: 0 1.25rem; max-width: 900px; margin-left: auto; margin-right: auto; }
+.loading { text-align: center; padding: 3rem; color: var(--text3); font-style: italic; }
 </style>
 </head>
 <body>
+
+<!-- CONFIG -->
+<script>
+const CONFIG = {
+  supabaseUrl: 'https://vbeztitzdnzfwmlfiatt.supabase.co',
+  supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZiZXp0aXR6ZG56ZndtbGZpYXR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2MzkyMDEsImV4cCI6MjA5MTIxNTIwMX0.E9WOu9ctreqcfJBSpnHkjtssWWmOvE__7skbpSDN2WY',
+};
+</script>
 
 <div class="header">
   <div class="header-inner">
@@ -265,6 +161,7 @@ select { cursor: pointer; }
 <div class="filters" id="filters-bar"></div>
 
 <div class="main">
+  <div id="loading" class="loading">Loading recipes…</div>
   <div class="recipe-grid" id="recipe-grid"></div>
   <div class="empty" id="empty-state" style="display:none">
     <div class="empty-icon">🍳</div>
@@ -324,7 +221,7 @@ select { cursor: pointer; }
     </div>
     <div class="form-row">
       <label>Key ingredients <span style="font-weight:300;color:var(--text3)">(comma separated)</span></label>
-      <input type="text" id="f-ingredients" placeholder="e.g. chicken, coconut milk, ginger">
+      <input type="text" id="f-ingredients" placeholder="e.g. eggplant, bitter melon, coconut milk">
     </div>
     <div class="form-row">
       <label>Notes</label>
@@ -358,11 +255,10 @@ select { cursor: pointer; }
 
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-const STORAGE_KEY = 'myrecipebox_v1';
-let recipes = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-if (!recipes.length) recipes = getSamples();
-
+let sb;
+let recipes = [];
 let filterCuisine = 'All';
 let filterMeal = 'All';
 let filterStatus = 'All';
@@ -371,7 +267,59 @@ let editingId = null;
 let currentStatus = 'try';
 let pendingDeleteId = null;
 
-function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(recipes)); }
+async function initApp() {
+  if (CONFIG.supabaseUrl === 'YOUR_SUPABASE_URL') {
+    recipes = getSamples();
+    document.getElementById('loading').style.display = 'none';
+    render();
+    return;
+  }
+  sb = supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
+  await loadRecipes();
+  setupRealtime();
+}
+
+async function loadRecipes() {
+  const { data, error } = await sb.from('recipes').select('*').order('saved_at', { ascending: false });
+  document.getElementById('loading').style.display = 'none';
+  if (error) { toast('Error loading: ' + error.message); return; }
+  recipes = data || [];
+  render();
+}
+
+function setupRealtime() {
+  sb.channel('recipes')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'recipes' }, () => {
+      loadRecipes();
+    })
+    .subscribe();
+}
+
+async function saveRecipe(recipe) {
+  if (!sb) {
+    if (editingId) recipes = recipes.map(r => r.id === editingId ? {...recipe, id: editingId} : r);
+    else { recipe.id = Date.now(); recipes.unshift(recipe); }
+    render(); toast(editingId ? 'Recipe updated' : 'Recipe saved!'); return;
+  }
+  if (editingId) {
+    const { error } = await sb.from('recipes').update(recipe).eq('id', editingId);
+    if (error) { toast('Save error: ' + error.message); return; }
+    toast('Recipe updated');
+  } else {
+    const { error } = await sb.from('recipes').insert(recipe);
+    if (error) { toast('Save error: ' + error.message); return; }
+    toast('Recipe saved!');
+  }
+  await loadRecipes();
+}
+
+async function deleteRecipe(id) {
+  if (!sb) { recipes = recipes.filter(r => r.id !== id); render(); toast('Removed'); return; }
+  const { error } = await sb.from('recipes').delete().eq('id', id);
+  if (error) { toast('Delete error: ' + error.message); return; }
+  toast('Recipe removed');
+  await loadRecipes();
+}
 
 function getFiltered() {
   return recipes.filter(r => {
@@ -388,11 +336,7 @@ function getFiltered() {
   });
 }
 
-function render() {
-  renderStats();
-  renderFilters();
-  renderGrid();
-}
+function render() { renderStats(); renderFilters(); renderGrid(); }
 
 function renderStats() {
   document.getElementById('stats-bar').innerHTML = `
@@ -435,7 +379,7 @@ function renderGrid() {
         </div>
       </div>
       <div class="card-meta">
-        ${r.status === 'try' ? '<span class="badge badge-try">🔖 Want to try</span>' : '<span class="badge badge-liked">❤️ Tried & liked</span>'}
+        ${r.status==='try' ? '<span class="badge badge-try">🔖 Want to try</span>' : '<span class="badge badge-liked">❤️ Tried & liked</span>'}
         ${r.cuisine ? `<span class="badge badge-cuisine">${esc(r.cuisine)}</span>` : ''}
         ${r.meal ? `<span class="badge badge-meal">${esc(r.meal)}</span>` : ''}
       </div>
@@ -446,7 +390,6 @@ function renderGrid() {
   `).join('');
 }
 
-/* ── modal ── */
 function openAdd() {
   editingId = null;
   document.getElementById('modal-heading').textContent = 'Add recipe';
@@ -462,9 +405,9 @@ function openAdd() {
 }
 
 window.openEdit = function(id) {
-  const r = recipes.find(x => x.id === id);
+  const r = recipes.find(x => x.id == id);
   if (!r) return;
-  editingId = id;
+  editingId = r.id;
   document.getElementById('modal-heading').textContent = 'Edit recipe';
   document.getElementById('f-url').value = r.url || '';
   document.getElementById('f-title').value = r.title || '';
@@ -483,17 +426,15 @@ document.getElementById('add-btn').onclick = openAdd;
 
 window.setStatus = function(s) {
   currentStatus = s;
-  document.getElementById('sp-try').className = 'status-pill' + (s === 'try' ? ' active-try' : '');
-  document.getElementById('sp-liked').className = 'status-pill' + (s === 'liked' ? ' active-liked' : '');
+  document.getElementById('sp-try').className = 'status-pill' + (s==='try' ? ' active-try' : '');
+  document.getElementById('sp-liked').className = 'status-pill' + (s==='liked' ? ' active-liked' : '');
 };
 
-document.getElementById('modal-save').onclick = () => {
+document.getElementById('modal-save').onclick = async () => {
   const title = document.getElementById('f-title').value.trim();
   if (!title) { document.getElementById('f-title').focus(); toast('Recipe name is required'); return; }
-  const ingredients = document.getElementById('f-ingredients').value
-    .split(',').map(s=>s.trim()).filter(Boolean);
+  const ingredients = document.getElementById('f-ingredients').value.split(',').map(s=>s.trim()).filter(Boolean);
   const recipe = {
-    id: editingId || Date.now(),
     title,
     url: document.getElementById('f-url').value.trim() || null,
     cuisine: document.getElementById('f-cuisine').value || null,
@@ -501,17 +442,11 @@ document.getElementById('modal-save').onclick = () => {
     ingredients,
     notes: document.getElementById('f-notes').value.trim() || null,
     status: currentStatus,
-    saved_at: editingId ? (recipes.find(r=>r.id===editingId)?.saved_at || new Date().toISOString()) : new Date().toISOString(),
   };
-  if (editingId) recipes = recipes.map(r => r.id === editingId ? recipe : r);
-  else recipes.unshift(recipe);
-  save();
   closeModal();
-  render();
-  toast(editingId ? 'Recipe updated' : 'Recipe saved!');
+  await saveRecipe(recipe);
 };
 
-/* ── fetch title ── */
 document.getElementById('fetch-btn').onclick = async () => {
   const url = document.getElementById('f-url').value.trim();
   if (!url) return;
@@ -529,20 +464,16 @@ document.getElementById('fetch-btn').onclick = async () => {
   btn.disabled = false;
 };
 
-/* ── delete ── */
 window.askDelete = function(id) { pendingDeleteId = id; document.getElementById('confirm-overlay').classList.add('open'); };
 document.getElementById('confirm-cancel').onclick = () => document.getElementById('confirm-overlay').classList.remove('open');
-document.getElementById('confirm-ok').onclick = () => {
-  recipes = recipes.filter(r => r.id !== pendingDeleteId);
-  save(); render();
+document.getElementById('confirm-ok').onclick = async () => {
   document.getElementById('confirm-overlay').classList.remove('open');
-  toast('Recipe removed');
+  await deleteRecipe(pendingDeleteId);
+  pendingDeleteId = null;
 };
 
-/* ── search ── */
 document.getElementById('search-input').oninput = function() { searchQuery = this.value; render(); };
 
-/* ── toast ── */
 let toastTimer;
 function toast(msg) {
   const el = document.getElementById('toast');
@@ -551,26 +482,22 @@ function toast(msg) {
   toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
 }
 
-/* ── helpers ── */
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-/* ── keyboard ── */
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { closeModal(); document.getElementById('confirm-overlay').classList.remove('open'); }
   if ((e.metaKey||e.ctrlKey) && e.key==='k') { e.preventDefault(); openAdd(); }
 });
 
-/* ── samples ── */
 function getSamples() {
   return [
-    {id:1,title:'Malabar Fish Curry',url:'https://example.com',cuisine:'South Indian',meal:'Dinner',ingredients:['fish','coconut milk','tamarind','curry leaves'],notes:'Try with kingfish. Less tamarind next time.',status:'liked',saved_at:'2026-06-01'},
-    {id:2,title:'Mushroom Risotto',url:'https://example.com',cuisine:'Italian',meal:'Dinner',ingredients:['arborio rice','porcini','parmesan','white wine'],notes:'Saw this on Smitten Kitchen — looks manageable.',status:'try',saved_at:'2026-06-02'},
-    {id:3,title:'Avocado Toast with Poached Egg',url:null,cuisine:'American',meal:'Breakfast',ingredients:['sourdough','avocado','egg'],notes:'Simple weekday breakfast.',status:'liked',saved_at:'2026-06-03'},
-    {id:4,title:'Pad Thai',url:'https://example.com',cuisine:'Thai',meal:'Dinner',ingredients:['rice noodles','tofu','tamarind','peanuts','bean sprouts'],notes:'Need to find tamarind paste locally.',status:'try',saved_at:'2026-06-04'},
+    {id:1,title:'Malabar Fish Curry',url:'https://example.com',cuisine:'South Indian',meal:'Dinner',ingredients:['fish','coconut milk','tamarind','curry leaves'],notes:'Try with kingfish.',status:'liked',saved_at:'2026-06-01'},
+    {id:2,title:'Stuffed Bitter Melon',url:null,cuisine:'South Indian',meal:'Lunch',ingredients:['bitter melon','minced meat','onion','spices'],notes:'Grandma style.',status:'try',saved_at:'2026-06-02'},
+    {id:3,title:'Eggplant Parmigiana',url:'https://example.com',cuisine:'Italian',meal:'Dinner',ingredients:['eggplant','tomato sauce','mozzarella','basil'],notes:'Found on Serious Eats.',status:'try',saved_at:'2026-06-03'},
   ];
 }
 
-render();
+initApp();
 </script>
 </body>
 </html>
