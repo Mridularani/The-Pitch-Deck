@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Story Bank</title>
+<style>
+  /* ── reset & base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff;
+    --bg2: #f7f7f5;
+    --bg3: #f0ede8;
+    --border: rgba(0,0,0,0.12);
+    --border2: rgba(0,0,0,0.22);
+    --text: #1a1a18;
+    --text2: #5a5a56;
+    --text3: #9a9a94;
+    --info-bg: #e6f1fb;
+    --info-text: #0c447c;
+    --info-border: rgba(24,95,165,0.3);
+    --success-bg: #eaf3de;
+    --success-text: #27500a;
+    --warn-bg: #faeeda;
+    --warn-text: #633806;
+    --danger-bg: #fcebeb;
+    --danger-text: #791f1f;
+    --purple-bg: #eeedfe;
+    --purple-text: #3c3489;
+    --radius: 8px;
+    --radius-lg: 12px;
+    --star: #ba7517;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1a;
+      --bg2: #252523;
+      --bg3: #2e2e2b;
+      --border: rgba(255,255,255,0.1);
+      --border2: rgba(255,255,255,0.2);
+      --text: #f0ede8;
+      --text2: #a8a8a0;
+      --text3: #686860;
+      --info-bg: #0c2d4a;
+      --info-text: #85b7eb;
+      --info-border: rgba(55,138,221,0.3);
+      --success-bg: #162808;
+      --success-text: #97c459;
+      --warn-bg: #2a1c06;
+      --warn-text: #ef9f27;
+      --danger-bg: #2a0d0d;
+      --danger-text: #f09595;
+      --purple-bg: #1e1c40;
+      --purple-text: #afa9ec;
+      --star: #ef9f27;
+    }
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg3); color: var(--text); font-size: 15px; line-height: 1.5; min-height: 100vh; }
+
+  /* ── login screen ── */
+  #login-screen {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  }
+  .login-card {
+    background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg);
+    padding: 2rem; width: 340px; text-align: center;
+  }
+  .login-card h1 { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
+  .login-card p { font-size: 13px; color: var(--text2); margin-bottom: 1.5rem; }
+  .login-card input { width: 100%; margin-bottom: 10px; }
+  .login-error { font-size: 12px; color: var(--danger-text); margin-top: 8px; display: none; }
+
+  /* ── main app ── */
+  #app { display: none; max-width: 1100px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+
+  /* ── topbar ── */
+  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 10px; }
+  .topbar-left { display: flex; align-items: center; gap: 10px; }
+  .topbar-left h1 { font-size: 20px; font-weight: 500; }
+  .topbar-right { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+  /* ── buttons ── */
+  button, .btn {
+    font-family: inherit; font-size: 13px; padding: 7px 13px;
+    border: 0.5px solid var(--border2); border-radius: var(--radius);
+    background: transparent; color: var(--text); cursor: pointer; display: inline-flex;
+    align-items: center; gap: 5px; transition: background 0.12s;
+  }
+  button:hover, .btn:hover { background: var(--bg2); }
+  button:active { transform: scale(0.98); }
+  .btn-primary {
+    background: var(--info-bg); border-color: var(--info-border); color: var(--info-text);
+  }
+  .btn-primary:hover { opacity: 0.85; background: var(--info-bg); }
+  .btn-danger { color: var(--danger-text); }
+  .btn-danger:hover { background: var(--danger-bg); }
+  .btn-icon { padding: 5px 7px; border-color: transparent; }
+  .btn-icon:hover { border-color: var(--border); }
+
+  /* ── inputs ── */
+  input[type=text], input[type=url], input[type=password], input[type=email], select, textarea {
+    font-family: inherit; font-size: 13px; padding: 7px 10px;
+    border: 0.5px solid var(--border2); border-radius: var(--radius);
+    background: var(--bg); color: var(--text); outline: none; width: 100%;
+  }
+  input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 2px var(--info-border); border-color: var(--info-border); }
+  textarea { resize: vertical; height: 70px; line-height: 1.5; }
+  select { cursor: pointer; }
+
+  /* ── stats ── */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: 1rem; }
+  .stat { background: var(--bg); border-radius: var(--radius); padding: 10px 14px; border: 0.5px solid var(--border); }
+  .stat-label { font-size: 11px; color: var(--text2); margin-bottom: 2px; }
+  .stat-val { font-size: 22px; font-weight: 500; }
+
+  /* ── filters ── */
+  .filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 0.5px solid var(--border); }
+  .pill {
+    font-size: 12px; padding: 4px 10px; border-radius: 20px;
+    border: 0.5px solid var(--border2); background: transparent; color: var(--text2); cursor: pointer;
+  }
+  .pill:hover { background: var(--bg2); }
+  .pill.active { background: var(--info-bg); border-color: var(--info-border); color: var(--info-text); }
+  .filter-sep { width: 0.5px; background: var(--border); align-self: stretch; margin: 0 2px; }
+
+  /* ── search ── */
+  .search-wrap { position: relative; }
+  .search-wrap input { padding-left: 30px; width: 200px; }
+  .search-icon { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); color: var(--text3); font-size: 14px; pointer-events: none; }
+
+  /* ── list view ── */
+  .list-table { width: 100%; border-collapse: collapse; background: var(--bg); border-radius: var(--radius-lg); overflow: hidden; border: 0.5px solid var(--border); }
+  .list-table th { font-size: 11px; color: var(--text2); font-weight: 500; padding: 8px 12px; text-align: left; border-bottom: 0.5px solid var(--border); background: var(--bg2); }
+  .list-table td { padding: 10px 12px; border-bottom: 0.5px solid var(--border); vertical-align: middle; font-size: 13px; }
+  .list-table tr:last-child td { border-bottom: none; }
+  .list-table tbody tr:hover { background: var(--bg2); }
+  .list-table tbody tr.covered { opacity: 0.45; }
+  .item-title { font-weight: 500; font-size: 13px; line-height: 1.3; }
+  .item-url { font-size: 11px; color: var(--text3); max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .item-url a { color: var(--text3); text-decoration: none; }
+  .item-url a:hover { color: var(--info-text); text-decoration: underline; }
+
+  /* ── badges ── */
+  .badge { font-size: 11px; padding: 2px 7px; border-radius: 10px; display: inline-block; white-space: nowrap; }
+  .badge-article { background: var(--info-bg); color: var(--info-text); }
+  .badge-video { background: var(--warn-bg); color: var(--warn-text); }
+  .badge-tweet { background: var(--success-bg); color: var(--success-text); }
+  .badge-other { background: var(--bg3); color: var(--text2); }
+  .cat-badge { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: var(--bg2); color: var(--text2); white-space: nowrap; }
+
+  /* ── flags ── */
+  .flags { display: flex; gap: 4px; flex-wrap: wrap; }
+  .flag { font-size: 10px; padding: 2px 6px; border-radius: 8px; white-space: nowrap; }
+  .flag-podcast { background: var(--purple-bg); color: var(--purple-text); }
+  .flag-hot { background: var(--danger-bg); color: var(--danger-text); }
+  .flag-research { background: var(--warn-bg); color: var(--warn-text); }
+  .flag-covered { background: var(--success-bg); color: var(--success-text); }
+  .flag-assigned { background: var(--bg3); color: var(--text2); }
+
+  /* ── stars ── */
+  .stars { color: var(--star); letter-spacing: 1px; font-size: 13px; white-space: nowrap; }
+  .stars .empty { color: var(--border2); }
+
+  /* ── card view ── */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+  .card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1rem; }
+  .card.covered { opacity: 0.45; }
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 8px; }
+  .card-title { font-size: 14px; font-weight: 500; line-height: 1.4; flex: 1; }
+  .card-meta { font-size: 11px; color: var(--text2); margin-bottom: 6px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .card-url { font-size: 11px; color: var(--text3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 8px; }
+  .card-url a { color: var(--text3); text-decoration: none; }
+  .card-url a:hover { color: var(--info-text); }
+  .card-actions { display: flex; gap: 4px; flex-shrink: 0; }
+
+  /* ── modal ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+    z-index: 100; align-items: center; justify-content: center; padding: 1rem;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--bg); border: 0.5px solid var(--border2); border-radius: var(--radius-lg);
+    padding: 1.5rem; width: 100%; max-width: 540px; max-height: 90vh; overflow-y: auto;
+  }
+  .modal h2 { font-size: 16px; font-weight: 500; margin-bottom: 1.25rem; }
+  .form-row { margin-bottom: 14px; }
+  .form-row label { display: block; font-size: 12px; color: var(--text2); margin-bottom: 5px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .fetch-row { display: flex; gap: 6px; }
+  .fetch-row input { flex: 1; }
+  .flag-checks { display: flex; gap: 14px; flex-wrap: wrap; }
+  .flag-check { display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; }
+  .flag-check input { width: auto; cursor: pointer; }
+  .star-picker { display: flex; gap: 4px; }
+  .star-btn { font-size: 20px; background: none; border: none; cursor: pointer; padding: 0; line-height: 1; color: var(--border2); transition: color 0.1s; }
+  .star-btn.on { color: var(--star); }
+  .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 1.25rem; padding-top: 1rem; border-top: 0.5px solid var(--border); }
+
+  /* ── toast ── */
+  .toast {
+    position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--text); color: var(--bg);
+    font-size: 13px; padding: 10px 16px; border-radius: var(--radius); z-index: 200;
+    opacity: 0; transform: translateY(8px); transition: opacity 0.2s, transform 0.2s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  /* ── empty state ── */
+  .empty { text-align: center; padding: 4rem 1rem; color: var(--text2); }
+  .empty svg { opacity: 0.3; margin-bottom: 12px; }
+
+  /* ── spinner ── */
+  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border2); border-top-color: var(--info-text); border-radius: 50%; animation: spin 0.6s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── confirm dialog ── */
+  .confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 150; align-items: center; justify-content: center; }
+  .confirm-overlay.open { display: flex; }
+  .confirm-box { background: var(--bg); border: 0.5px solid var(--border2); border-radius: var(--radius-lg); padding: 1.5rem; max-width: 340px; width: 100%; }
+  .confirm-box p { font-size: 14px; margin-bottom: 1.25rem; color: var(--text2); }
+  .confirm-box h3 { font-size: 15px; font-weight: 500; margin-bottom: 8px; }
+  .confirm-actions { display: flex; gap: 8px; justify-content: flex-end; }
+</style>
+</head>
+<body>
+
+<!-- ── CONFIG (edit these before deploying) ── -->
+<script>
+const CONFIG = {
+  supabaseUrl:    'YOUR_SUPABASE_URL',
+  supabaseKey:    'YOUR_SUPABASE_ANON_KEY',
+  appPassword:    'YOUR_TEAM_PASSWORD',
+  sessionHours:   8,
+};
+</script>
+
+<!-- ── LOGIN ── -->
+<div id="login-screen">
+  <div class="login-card">
+    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" style="margin:0 auto 12px">
+      <rect width="36" height="36" rx="8" fill="#E6F1FB"/>
+      <path d="M10 12h16M10 18h12M10 24h8" stroke="#185FA5" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <h1>The Story Bank</h1>
+    <p>Enter the team password to continue</p>
+    <input type="password" id="pw-input" placeholder="Password" autocomplete="current-password">
+    <button class="btn-primary" style="width:100%;justify-content:center;padding:9px;" id="pw-btn">Enter</button>
+    <p class="login-error" id="pw-error">Wrong password. Try again.</p>
+  </div>
+</div>
+
+<!-- ── APP ── -->
+<div id="app">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M4 6h16M4 10h12M4 14h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <h1>The Story Bank</h1>
+    </div>
+    <div class="topbar-right">
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input type="text" id="search-input" placeholder="Search…">
+      </div>
+      <button id="view-toggle" title="Toggle view">
+        <span id="view-icon">▦</span> <span id="view-label">Cards</span>
+      </button>
+      <button id="export-btn" title="Export JSON">↓ Export</button>
+      <button class="btn-primary" id="add-btn">+ Add item</button>
+    </div>
+  </div>
+
+  <div class="stats" id="stats-bar"></div>
+
+  <div class="filters" id="filters-bar"></div>
+
+  <!-- list view -->
+  <div id="list-view">
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th style="width:30%">Item</th>
+          <th>Type</th>
+          <th>Category</th>
+          <th>Priority</th>
+          <th>Flags</th>
+          <th>Assigned</th>
+          <th style="width:60px"></th>
+        </tr>
+      </thead>
+      <tbody id="list-body"></tbody>
+    </table>
+    <div id="list-empty" class="empty" style="display:none">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="8" y="10" width="32" height="28" rx="4" stroke="currentColor" stroke-width="2"/><path d="M16 18h16M16 24h12M16 30h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <p>No items match your filters</p>
+    </div>
+  </div>
+
+  <!-- card view -->
+  <div id="card-view" style="display:none">
+    <div class="card-grid" id="card-body"></div>
+    <div id="card-empty" class="empty" style="display:none">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="8" y="10" width="32" height="28" rx="4" stroke="currentColor" stroke-width="2"/><path d="M16 18h16M16 24h12M16 30h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <p>No items match your filters</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── ADD / EDIT MODAL ── -->
+<div class="modal-overlay" id="item-modal">
+  <div class="modal">
+    <h2 id="modal-heading">Add item</h2>
+    <div class="form-row">
+      <label>URL</label>
+      <div class="fetch-row">
+        <input type="url" id="f-url" placeholder="https://…">
+        <button id="fetch-btn">↻ Fetch title</button>
+      </div>
+    </div>
+    <div class="form-row">
+      <label>Title *</label>
+      <input type="text" id="f-title" placeholder="Story headline">
+    </div>
+    <div class="form-grid">
+      <div class="form-row">
+        <label>Type</label>
+        <select id="f-type">
+          <option>Article</option>
+          <option>Video</option>
+          <option>Tweet</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Category</label>
+        <select id="f-cat">
+          <option>Politics &amp; Government</option>
+          <option>Corporate Wrongdoing</option>
+          <option>Health &amp; Pharma</option>
+          <option>Environment &amp; Climate</option>
+          <option>Tech &amp; AI</option>
+          <option>Media &amp; Culture</option>
+          <option>International</option>
+          <option value="__custom__">Custom…</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row" id="custom-cat-row" style="display:none">
+      <label>Custom category</label>
+      <input type="text" id="f-custom-cat" placeholder="Enter category name">
+    </div>
+    <div class="form-row">
+      <label>Priority</label>
+      <div class="star-picker" id="star-picker"></div>
+    </div>
+    <div class="form-row">
+      <label>Flags</label>
+      <div class="flag-checks">
+        <label class="flag-check"><input type="checkbox" id="f-podcast"> Podcast worthy</label>
+        <label class="flag-check"><input type="checkbox" id="f-hot"> Hot right now</label>
+        <label class="flag-check"><input type="checkbox" id="f-research"> Needs research</label>
+        <label class="flag-check"><input type="checkbox" id="f-covered"> Already covered</label>
+      </div>
+    </div>
+    <div class="form-row">
+      <label>Assigned to</label>
+      <input type="text" id="f-assigned" placeholder="Team member name (optional)">
+    </div>
+    <div class="form-row">
+      <label>Notes / angle</label>
+      <textarea id="f-notes" placeholder="What's the story hook? Any research notes…"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button id="modal-cancel">Cancel</button>
+      <button class="btn-primary" id="modal-save">Save item</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONFIRM DIALOG ── -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <h3>Delete item?</h3>
+    <p>This cannot be undone.</p>
+    <div class="confirm-actions">
+      <button id="confirm-cancel">Cancel</button>
+      <button class="btn-danger" id="confirm-ok">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast"></div>
+
+<!-- ── Supabase CDN ── -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+<script>
+/* ── auth ── */
+const SESSION_KEY = 'storybank_auth';
+function checkSession() {
+  const s = localStorage.getItem(SESSION_KEY);
+  if (!s) return false;
+  try {
+    const { expires } = JSON.parse(s);
+    return Date.now() < expires;
+  } catch { return false; }
+}
+function setSession() {
+  localStorage.setItem(SESSION_KEY, JSON.stringify({ expires: Date.now() + CONFIG.sessionHours * 3600000 }));
+}
+function boot() {
+  if (checkSession()) showApp();
+  else document.getElementById('login-screen').style.display = 'flex';
+}
+document.getElementById('pw-btn').onclick = tryLogin;
+document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+function tryLogin() {
+  if (document.getElementById('pw-input').value === CONFIG.appPassword) {
+    setSession();
+    showApp();
+  } else {
+    document.getElementById('pw-error').style.display = 'block';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+  }
+}
+function showApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  initApp();
+}
+
+/* ── supabase ── */
+let sb;
+function initSupabase() {
+  if (CONFIG.supabaseUrl === 'YOUR_SUPABASE_URL') {
+    console.warn('Supabase not configured — running in demo mode (in-memory only)');
+    return null;
+  }
+  return supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
+}
+
+/* ── state ── */
+let items = [];
+let viewMode = 'list';
+let filterCat = 'All';
+let filterType = 'All';
+let filterFlag = 'All';
+let searchQuery = '';
+let starVal = 3;
+let editingId = null;
+let pendingDeleteId = null;
+const KNOWN_CATS = ['Politics & Government','Corporate Wrongdoing','Health & Pharma','Environment & Climate','Tech & AI','Media & Culture','International'];
+
+/* ── init ── */
+async function initApp() {
+  sb = initSupabase();
+  await loadItems();
+  setupRealtime();
+  render();
+}
+
+/* ── data ── */
+async function loadItems() {
+  if (!sb) {
+    items = getSampleItems();
+    return;
+  }
+  const { data, error } = await sb.from('story_items').select('*').order('created_at', { ascending: false });
+  if (error) { toast('Error loading items: ' + error.message); return; }
+  items = data || [];
+}
+
+function setupRealtime() {
+  if (!sb) return;
+  sb.channel('story_items')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'story_items' }, () => {
+      loadItems().then(render);
+    })
+    .subscribe();
+}
+
+async function saveItem(item) {
+  if (!sb) {
+    if (item.id) {
+      items = items.map(i => i.id === item.id ? item : i);
+    } else {
+      item.id = Date.now();
+      item.created_at = new Date().toISOString();
+      items.unshift(item);
+    }
+    render();
+    toast(item.id ? 'Item updated' : 'Item added');
+    return;
+  }
+  if (editingId) {
+    const { error } = await sb.from('story_items').update(item).eq('id', editingId);
+    if (error) { toast('Save error: ' + error.message); return; }
+    toast('Item updated');
+  } else {
+    const { error } = await sb.from('story_items').insert(item);
+    if (error) { toast('Save error: ' + error.message); return; }
+    toast('Item added');
+  }
+  await loadItems();
+  render();
+}
+
+async function deleteItemById(id) {
+  if (!sb) {
+    items = items.filter(i => i.id !== id);
+    render();
+    toast('Item deleted');
+    return;
+  }
+  const { error } = await sb.from('story_items').delete().eq('id', id);
+  if (error) { toast('Delete error: ' + error.message); return; }
+  toast('Item deleted');
+  await loadItems();
+  render();
+}
+
+/* ── filters ── */
+function getFiltered() {
+  return items.filter(it => {
+    if (filterCat !== 'All' && it.category !== filterCat) return false;
+    if (filterType !== 'All' && it.type !== filterType) return false;
+    if (filterFlag === 'Podcast' && !it.podcast_worthy) return false;
+    if (filterFlag === 'Hot' && !it.hot) return false;
+    if (filterFlag === 'Research' && !it.needs_research) return false;
+    if (filterFlag === 'Covered' && !it.covered) return false;
+    if (filterFlag === 'Uncovered' && it.covered) return false;
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      if (!it.title?.toLowerCase().includes(q) && !it.category?.toLowerCase().includes(q) && !it.notes?.toLowerCase().includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+/* ── render ── */
+function render() {
+  renderStats();
+  renderFilters();
+  if (viewMode === 'list') renderList();
+  else renderCards();
+}
+
+function renderStats() {
+  const el = document.getElementById('stats-bar');
+  el.innerHTML = `
+    <div class="stat"><div class="stat-label">Total items</div><div class="stat-val">${items.length}</div></div>
+    <div class="stat"><div class="stat-label">Podcast worthy</div><div class="stat-val">${items.filter(i=>i.podcast_worthy).length}</div></div>
+    <div class="stat"><div class="stat-label">Hot right now</div><div class="stat-val">${items.filter(i=>i.hot).length}</div></div>
+    <div class="stat"><div class="stat-label">Already covered</div><div class="stat-val">${items.filter(i=>i.covered).length}</div></div>
+    <div class="stat"><div class="stat-label">Needs research</div><div class="stat-val">${items.filter(i=>i.needs_research).length}</div></div>
+  `;
+}
+
+function renderFilters() {
+  const usedCats = ['All', ...new Set(items.map(i => i.category).filter(Boolean))];
+  const types = ['All','Article','Video','Tweet','Other'];
+  const flags = ['All','Podcast','Hot','Research','Covered','Uncovered'];
+  let h = usedCats.map(c =>
+    `<button class="pill${filterCat===c?' active':''}" data-cat="${c}">${c}</button>`
+  ).join('');
+  h += '<div class="filter-sep"></div>';
+  h += types.filter(t=>t!=='All').map(t =>
+    `<button class="pill${filterType===t?' active':''}" data-type="${t}">${t}</button>`
+  ).join('');
+  h += '<div class="filter-sep"></div>';
+  h += flags.map(f =>
+    `<button class="pill${filterFlag===f?' active':''}" data-flag="${f}">${f}</button>`
+  ).join('');
+  document.getElementById('filters-bar').innerHTML = h;
+  document.querySelectorAll('[data-cat]').forEach(b => b.onclick = () => { filterCat = b.dataset.cat; render(); });
+  document.querySelectorAll('[data-type]').forEach(b => b.onclick = () => { filterType = b.dataset.type; render(); });
+  document.querySelectorAll('[data-flag]').forEach(b => b.onclick = () => { filterFlag = b.dataset.flag; render(); });
+}
+
+function starsHtml(n) {
+  let h = '';
+  for (let i = 1; i <= 5; i++) h += `<span class="${i<=n?'':'empty'}">★</span>`;
+  return `<span class="stars">${h}</span>`;
+}
+
+function flagsHtml(it) {
+  let h = '';
+  if (it.podcast_worthy) h += `<span class="flag flag-podcast">Podcast</span>`;
+  if (it.hot) h += `<span class="flag flag-hot">Hot</span>`;
+  if (it.needs_research) h += `<span class="flag flag-research">Research</span>`;
+  if (it.covered) h += `<span class="flag flag-covered">Covered</span>`;
+  if (it.assigned_to) h += `<span class="flag flag-assigned">→ ${escHtml(it.assigned_to)}</span>`;
+  return h;
+}
+
+function typeBadge(t) {
+  const cls = {article:'badge-article',video:'badge-video',tweet:'badge-tweet',other:'badge-other'}[t?.toLowerCase()]||'badge-other';
+  return `<span class="badge ${cls}">${escHtml(t||'—')}</span>`;
+}
+
+function renderList() {
+  const filtered = getFiltered();
+  const tbody = document.getElementById('list-body');
+  document.getElementById('list-empty').style.display = filtered.length ? 'none' : 'block';
+  tbody.innerHTML = filtered.map(it => `
+    <tr class="${it.covered?'covered':''}" data-id="${it.id}">
+      <td>
+        <div class="item-title">${escHtml(it.title)}</div>
+        <div class="item-url"><a href="${escHtml(it.url||'')}" target="_blank" rel="noopener">${escHtml(it.url||'')}</a></div>
+      </td>
+      <td>${typeBadge(it.type)}</td>
+      <td><span class="cat-badge">${escHtml(it.category||'—')}</span></td>
+      <td>${starsHtml(it.priority||0)}</td>
+      <td><div class="flags">${flagsHtml(it)}</div></td>
+      <td style="font-size:12px;color:var(--text2)">${escHtml(it.assigned_to||'—')}</td>
+      <td>
+        <button class="btn-icon" title="Edit" onclick="openEdit(${it.id})">✎</button>
+        <button class="btn-icon btn-danger" title="Delete" onclick="confirmDelete(${it.id})">✕</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function renderCards() {
+  const filtered = getFiltered();
+  document.getElementById('card-empty').style.display = filtered.length ? 'none' : 'block';
+  document.getElementById('card-body').innerHTML = filtered.map(it => `
+    <div class="card ${it.covered?'covered':''}">
+      <div class="card-top">
+        <div class="card-title">${escHtml(it.title)}</div>
+        <div class="card-actions">
+          <button class="btn-icon" title="Edit" onclick="openEdit(${it.id})">✎</button>
+          <button class="btn-icon btn-danger" title="Delete" onclick="confirmDelete(${it.id})">✕</button>
+        </div>
+      </div>
+      <div class="card-meta">
+        ${typeBadge(it.type)}
+        <span class="cat-badge">${escHtml(it.category||'—')}</span>
+        ${starsHtml(it.priority||0)}
+      </div>
+      <div class="card-url"><a href="${escHtml(it.url||'')}" target="_blank" rel="noopener">${escHtml(it.url||'')}</a></div>
+      ${it.notes ? `<div style="font-size:12px;color:var(--text2);margin-bottom:6px;line-height:1.4">${escHtml(it.notes)}</div>` : ''}
+      <div class="flags">${flagsHtml(it)}</div>
+    </div>
+  `).join('');
+}
+
+/* ── modal ── */
+function openAdd() {
+  editingId = null;
+  document.getElementById('modal-heading').textContent = 'Add item';
+  document.getElementById('f-url').value = '';
+  document.getElementById('f-title').value = '';
+  document.getElementById('f-type').value = 'Article';
+  document.getElementById('f-cat').value = 'Politics & Government';
+  document.getElementById('custom-cat-row').style.display = 'none';
+  document.getElementById('f-podcast').checked = false;
+  document.getElementById('f-hot').checked = false;
+  document.getElementById('f-research').checked = false;
+  document.getElementById('f-covered').checked = false;
+  document.getElementById('f-assigned').value = '';
+  document.getElementById('f-notes').value = '';
+  starVal = 3;
+  renderStarPicker();
+  document.getElementById('item-modal').classList.add('open');
+  setTimeout(() => document.getElementById('f-title').focus(), 100);
+}
+
+window.openEdit = function(id) {
+  const it = items.find(i => i.id === id);
+  if (!it) return;
+  editingId = id;
+  document.getElementById('modal-heading').textContent = 'Edit item';
+  document.getElementById('f-url').value = it.url || '';
+  document.getElementById('f-title').value = it.title || '';
+  document.getElementById('f-type').value = it.type || 'Article';
+  if (KNOWN_CATS.includes(it.category)) {
+    document.getElementById('f-cat').value = it.category;
+    document.getElementById('custom-cat-row').style.display = 'none';
+  } else {
+    document.getElementById('f-cat').value = '__custom__';
+    document.getElementById('custom-cat-row').style.display = 'block';
+    document.getElementById('f-custom-cat').value = it.category || '';
+  }
+  document.getElementById('f-podcast').checked = !!it.podcast_worthy;
+  document.getElementById('f-hot').checked = !!it.hot;
+  document.getElementById('f-research').checked = !!it.needs_research;
+  document.getElementById('f-covered').checked = !!it.covered;
+  document.getElementById('f-assigned').value = it.assigned_to || '';
+  document.getElementById('f-notes').value = it.notes || '';
+  starVal = it.priority || 3;
+  renderStarPicker();
+  document.getElementById('item-modal').classList.add('open');
+};
+
+function closeModal() { document.getElementById('item-modal').classList.remove('open'); }
+
+document.getElementById('add-btn').onclick = openAdd;
+document.getElementById('modal-cancel').onclick = closeModal;
+document.getElementById('item-modal').onclick = e => { if (e.target === e.currentTarget) closeModal(); };
+
+document.getElementById('f-cat').onchange = function() {
+  document.getElementById('custom-cat-row').style.display = this.value === '__custom__' ? 'block' : 'none';
+};
+
+document.getElementById('modal-save').onclick = async () => {
+  const title = document.getElementById('f-title').value.trim();
+  if (!title) { document.getElementById('f-title').focus(); toast('Title is required'); return; }
+  const catSel = document.getElementById('f-cat').value;
+  const category = catSel === '__custom__'
+    ? (document.getElementById('f-custom-cat').value.trim() || 'Custom')
+    : catSel;
+  const item = {
+    title,
+    url: document.getElementById('f-url').value.trim() || null,
+    type: document.getElementById('f-type').value,
+    category,
+    priority: starVal,
+    podcast_worthy: document.getElementById('f-podcast').checked,
+    hot: document.getElementById('f-hot').checked,
+    needs_research: document.getElementById('f-research').checked,
+    covered: document.getElementById('f-covered').checked,
+    assigned_to: document.getElementById('f-assigned').value.trim() || null,
+    notes: document.getElementById('f-notes').value.trim() || null,
+  };
+  closeModal();
+  await saveItem(item);
+};
+
+/* ── fetch title ── */
+document.getElementById('fetch-btn').onclick = async () => {
+  const url = document.getElementById('f-url').value.trim();
+  if (!url) return;
+  const btn = document.getElementById('fetch-btn');
+  btn.innerHTML = '<span class="spinner"></span>';
+  btn.disabled = true;
+  try {
+    const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
+    const data = await res.json();
+    const match = data.contents?.match(/<title[^>]*>([^<]+)<\/title>/i);
+    if (match) {
+      document.getElementById('f-title').value = match[1].trim().replace(/\s+/g, ' ');
+      toast('Title fetched');
+    } else {
+      toast('Could not read title — enter manually');
+    }
+  } catch {
+    toast('Fetch failed — enter title manually');
+  }
+  btn.innerHTML = '↻ Fetch title';
+  btn.disabled = false;
+};
+
+/* ── star picker ── */
+function renderStarPicker() {
+  const c = document.getElementById('star-picker');
+  c.innerHTML = '';
+  for (let i = 1; i <= 5; i++) {
+    const b = document.createElement('button');
+    b.className = 'star-btn' + (i <= starVal ? ' on' : '');
+    b.textContent = '★';
+    b.type = 'button';
+    b.setAttribute('aria-label', `${i} star${i>1?'s':''}`);
+    b.onclick = () => { starVal = i; renderStarPicker(); };
+    c.appendChild(b);
+  }
+}
+
+/* ── delete confirm ── */
+window.confirmDelete = function(id) {
+  pendingDeleteId = id;
+  document.getElementById('confirm-overlay').classList.add('open');
+};
+document.getElementById('confirm-cancel').onclick = () => document.getElementById('confirm-overlay').classList.remove('open');
+document.getElementById('confirm-ok').onclick = async () => {
+  document.getElementById('confirm-overlay').classList.remove('open');
+  if (pendingDeleteId !== null) await deleteItemById(pendingDeleteId);
+  pendingDeleteId = null;
+};
+
+/* ── view toggle ── */
+document.getElementById('view-toggle').onclick = () => {
+  viewMode = viewMode === 'list' ? 'cards' : 'list';
+  document.getElementById('list-view').style.display = viewMode === 'list' ? 'block' : 'none';
+  document.getElementById('card-view').style.display = viewMode === 'cards' ? 'block' : 'none';
+  document.getElementById('view-icon').textContent = viewMode === 'list' ? '▦' : '☰';
+  document.getElementById('view-label').textContent = viewMode === 'list' ? 'Cards' : 'List';
+  render();
+};
+
+/* ── search ── */
+document.getElementById('search-input').oninput = function() { searchQuery = this.value; render(); };
+
+/* ── export ── */
+document.getElementById('export-btn').onclick = () => {
+  const blob = new Blob([JSON.stringify(items, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `storybank-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  toast('Exported');
+};
+
+/* ── toast ── */
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+/* ── helpers ── */
+function escHtml(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function getSampleItems() {
+  return [
+    {id:1,title:'EPA rolls back major clean air standards',url:'https://example.com',type:'Article',category:'Environment & Climate',priority:5,podcast_worthy:true,hot:true,needs_research:false,covered:false,assigned_to:'Maria',notes:'Could link to the lobbyist angle from last month.',created_at:'2026-06-04'},
+    {id:2,title:'Hospital chain billed Medicare for procedures never performed',url:'https://example.com',type:'Article',category:'Corporate Wrongdoing',priority:4,podcast_worthy:true,hot:false,needs_research:true,covered:false,assigned_to:'Dev',notes:'Need to verify the dollar figures.',created_at:'2026-06-03'},
+    {id:3,title:'Congress passes AI accountability bill — or does it?',url:'https://example.com',type:'Video',category:'Tech & AI',priority:3,podcast_worthy:false,hot:true,needs_research:false,covered:true,assigned_to:null,notes:null,created_at:'2026-06-02'},
+    {id:4,title:'Drug pricing loophole lets pharma avoid Medicare negotiation',url:'https://example.com',type:'Article',category:'Health & Pharma',priority:5,podcast_worthy:true,hot:false,needs_research:false,covered:false,assigned_to:'Maria',notes:'Perfect for the 10-minute explainer format.',created_at:'2026-06-01'},
+    {id:5,title:'Social media platform accused of suppressing political content',url:'https://example.com',type:'Tweet',category:'Media & Culture',priority:2,podcast_worthy:false,hot:false,needs_research:true,covered:false,assigned_to:null,notes:null,created_at:'2026-05-31'},
+  ];
+}
+
+/* ── keyboard shortcuts ── */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeModal();
+    document.getElementById('confirm-overlay').classList.remove('open');
+  }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openAdd(); }
+});
+
+/* ── start ── */
+boot();
+</script>
+</body>
+</html>
