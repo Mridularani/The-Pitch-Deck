@@ -9,6 +9,13 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Recipe Box">
+<link rel="manifest" href="/The-Pitch-Deck/manifest-recipes.json">
+<link rel="apple-touch-icon" href="/The-Pitch-Deck/icons/icon-recipe-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/YOUR_REPO_NAME/icons/icon-recipe-192.png"><meta name="theme-color" content="#b45309">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Recipe Box">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
