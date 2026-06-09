@@ -455,7 +455,6 @@ document.getElementById('fetch-btn').onclick = async () => {
   btn.disabled = true;
   try {
     const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`);
-    const data = await res.json();
     const text = await res.text();
 const match = text.match(/<title[^>]*>([^<]+)<\/title>/i);
     if (match) { document.getElementById('f-title').value = match[1].trim().replace(/\s+/g,' '); toast('Title fetched'); }
