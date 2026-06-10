@@ -2,7 +2,7 @@
   "name": "The Story Bank",
   "short_name": "Story Bank",
   "start_url": "/The-Pitch-Deck/",
-  "scope": "/The-Pitch-Deck/",
+  "scope": "/The-Pitch-Deck/index.html",
   "display": "standalone",
   "background_color": "#f0ede8",
   "theme_color": "#185FA5",
