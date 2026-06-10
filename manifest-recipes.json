@@ -2,7 +2,7 @@
   "name": "My Recipe Box",
   "short_name": "Recipe Box",
   "start_url": "/The-Pitch-Deck/recipes.html",
-  "scope": "/The-Pitch-Deck/",
+  "scope": "/The-Pitch-Deck/recipes.html",
   "display": "standalone",
   "background_color": "#fdf8f2",
   "theme_color": "#b45309",
